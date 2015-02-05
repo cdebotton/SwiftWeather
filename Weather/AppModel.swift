@@ -7,10 +7,25 @@
 //
 
 import Foundation
+import Alamofire
 
 class AppModel {
     
     var zipcode: String = ""
+    
+    func getToday(responseHandler: (AnyObject?) -> ()) -> () {
+        let ENDPOINT: String = "http://api.openweathermap.org/data/2.5/weather?q=\(zipcode)&units=imperial"
+        Alamofire.request(.GET, ENDPOINT).responseJSON {(request, response, JSON, error) in
+            responseHandler(JSON)
+        }
+    }
+    
+    func getFiveDay(responseHandler: (AnyObject?) -> ()) -> () {
+        let ENDPOINT: String = "http://api.openweathermap.org/data/2.5/forecast/daily?q=\(zipcode)&units=imperial&cnt=7"
+        Alamofire.request(.GET, ENDPOINT).responseJSON {(request, response, JSON, error) in
+            responseHandler(JSON)
+        }
+    }
 
     class var sharedInstance: AppModel {
         struct Static {
